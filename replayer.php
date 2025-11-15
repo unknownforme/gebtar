@@ -21,132 +21,7 @@ foreach ($player_actions as $action) {
         $total_actions[] = $indu_action;
     }
 }
-
-function hp_bar ($current_hp, $max_hp, $additional_info = ''):string {
-    $hp_percentage = (int)round(($current_hp/$max_hp) * 100);
-
-    //adds background coloring, and do stuff w it
-    $percentage_hp_left = (int)ceil($hp_percentage / 3);
-    $hp_string = '(hp: ' . $current_hp . "/" . $max_hp . ")";
-    $hp_string = str_pad($hp_string, 34);
-
-    $inside_hp_bar = substr($hp_string, 0, $percentage_hp_left);
-    $outside_hp_bar = substr($hp_string, $percentage_hp_left);
-    if ($hp_percentage >= 60) {
-        $hp_bar = "[" . bg_green($inside_hp_bar) . $outside_hp_bar . "] $additional_info" . PHP_EOL;
-    } elseif ($hp_percentage >= 30) {
-        $hp_bar = "[" . bg_yellow($inside_hp_bar) . $outside_hp_bar . "] $additional_info" . PHP_EOL;
-    } elseif ($current_hp >= 1) {
-        $hp_bar = "[" . bg_red($inside_hp_bar) . $outside_hp_bar . "] $additional_info" . PHP_EOL;
-    } else {
-        $hp_bar = "[" . $inside_hp_bar . $outside_hp_bar . "] $additional_info" . PHP_EOL;
-    }
-
-
-    return $hp_bar;
-}
-if (!function_exists('mb_str_pad')) {
-    function mb_str_pad($input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT, $encoding = 'UTF-8')
-    {
-        $input_length = mb_strlen($input, $encoding);
-        $pad_string_length = mb_strlen($pad_string, $encoding);
-
-        if ($pad_length <= 0 || ($pad_length - $input_length) <= 0) {
-            return $input;
-        }
-
-        $num_pad_chars = $pad_length - $input_length;
-
-        switch ($pad_type) {
-            case STR_PAD_RIGHT:
-                $left_pad = 0;
-                $right_pad = $num_pad_chars;
-            break;
-
-            case STR_PAD_LEFT:
-                $left_pad = $num_pad_chars;
-                $right_pad = 0;
-            break;
-
-            case STR_PAD_BOTH:
-                $left_pad = floor($num_pad_chars / 2);
-                $right_pad = $num_pad_chars - $left_pad;
-            break;
-        }
-
-        $result = '';
-        for ($i = 0; $i < $left_pad; ++$i) {
-            $result .= mb_substr($pad_string, $i % $pad_string_length, 1, $encoding);
-        }
-        $result .= $input;
-        for ($i = 0; $i < $right_pad; ++$i) {
-            $result .= mb_substr($pad_string, $i % $pad_string_length, 1, $encoding);
-        }
-
-        return $result;
-    }
-}
-
-function clearcmd () {
-    echo "\e[2J\e[H";
-}
-function slow_read ($text, $ms_time_between_chars= 35) {
-    $length = mb_strlen($text);
-    for ($i = 0; $i < $length; $i++) {
-        echo $text[$i];
-        if ($text[$i] == ',') {
-            usleep($ms_time_between_chars * 6000);
-        }
-        if ($text[$i] == '.' || $text[$i] == '!' || $text[$i] == '?') {
-            usleep($ms_time_between_chars * 10000);
-        }
-        usleep($ms_time_between_chars * 1000);
-    }
-}
-//colors
-function red ($word) {
-    return "\033[31m".$word."\033[0m";
-}
-function green ($word) {
-    return "\033[32m".$word."\033[0m";
-}
-function yellow ($word) {
-    return "\033[33m".$word."\033[0m";
-}
-function blue ($word) {
-    return "\033[34m".$word."\033[0m";
-}
-function purple ($word) {
-    return "\033[35m".$word."\033[0m";
-}
-function cyan ($word) {
-    return "\033[36m".$word."\033[0m";
-}
-function white ($word) {
-    return "\033[37m".$word."\033[0m";
-}
-
-function bg_red ($word) {
-    return "\033[41m" . $word . "\033[0m";
-}
-function bg_green ($word) {
-    return "\033[42m".$word."\033[0m";
-}
-function bg_yellow ($word) {
-    return "\033[43m" . $word . "\033[0m";
-}
-function bg_blue ($word) {
-    return "\033[44m".$word."\033[0m";
-}
-function bg_purple ($word) {
-    return "\033[45m".$word."\033[0m";
-}
-function bg_cyan ($word) {
-    return "\033[46m".$word."\033[0m";
-}
-function bg_white ($word) {
-    return "\033[47m".$word."\033[0m";
-}
+include('functions.php');
 clearcmd();
 //slow_read("damage rules: \nwhite does 1 damage, green does 5 damage,\nyellow does 45 damage, red does 125 damage,\nstaying does 25 damage.\npurple does 0 damage, BUT the next damage you take will be doubled. \ntile conversion rules: \nyellow becomes red.\nred becomes green.\ngreen becomes yellow on odd turns, or green, yellow, or purple on even turns.\nwhite becomes green, yellow, or purple.\npurple becomes any random color.\n", 1);
 $player_actions = [];
@@ -214,7 +89,7 @@ while($player_stats['health'][0] > 0) {
     }
 
     for ($boss_looks = 0; $boss_looks < $grid_size; $boss_looks++) {
-        echo mb_str_pad("", ($boss_pos * 2 * $grid_size) - ($grid_size * 2), '  ', STR_PAD_LEFT) . $boss_graphics[$boss_looks] . PHP_EOL;
+        echo str_pad("", ($boss_pos * 2 * $grid_size) - ($grid_size * 2), '  ', STR_PAD_LEFT) . $boss_graphics[$boss_looks] . PHP_EOL;
     }
     for($x = 0; $x < $arena_size; $x++) {
         for ($z = 0; $z < $grid_size; $z++) {
