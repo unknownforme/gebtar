@@ -66,10 +66,10 @@ function bg_red ($word) {
     return "\033[41m" . $word . "\033[0m";
 }
 function bg_green ($word) {
-    return "\033[42m".$word."\033[0m";
+    return "\033[30;42m".$word."\033[0m";
 }
 function bg_yellow ($word) {
-    return "\033[43m" . $word . "\033[0m";
+    return "\033[30;43m" . $word . "\033[0m";
 }
 function bg_blue ($word) {
     return "\033[44m".$word."\033[0m";
