@@ -124,7 +124,7 @@ while($player_stats['health'][0] > 0) {
     $turn++;
 
     //player movement
-    echo 'possible actions: up, down, left, right, stay, and hit' . PHP_EOL;
+    echo 'possible actions: WASD, X to stay, and F/H to hit' . PHP_EOL;
     while (true) {
         echo "action: $action" . PHP_EOL;
         while (true) {
