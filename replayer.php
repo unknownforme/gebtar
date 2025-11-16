@@ -130,12 +130,13 @@ while($player_stats['health'][0] > 0) {
         while (true) {
             $action = $total_actions[$player_turn];
             $player_turn++;
-            if ($action == 'up' || $action == 'down' || $action == 'left' || $action == 'right' || $action == 'stay' || $action == 'hit') {
+            if ($action == 'W' || $action == 'S' || $action == 'A' || $action == 'D' || $action == 'X' || $action == 'F' || $action == 'H') {
                 break;
             }
         }
         switch ($action) {
-            case 'hit':
+            case 'H':
+            case 'F':
                 if ($player_pos[0] == 0 && $player_pos[1] == ($boss_pos - 1)) {
                     $boss_stats['health'] -= 100;
                     echo "hit boss for 100 damage " . PHP_EOL;
@@ -158,35 +159,35 @@ while($player_stats['health'][0] > 0) {
                 echo $player_pos[1] . PHP_EOL . $player_pos[0] . PHP_EOL . $boss_pos . PHP_EOL;
                 echo "can't hit the boss, you're too far away" . PHP_EOL;
             break;
-            case 'up':
+            case 'W':
                 if ($player_pos[0] == 0) {
                     echo 'cant go outside the area, if you wanna go outside go touch grass' . PHP_EOL;
                     continue 2;
                 }
                 $player_pos[0]--;
             break 2;
-            case 'down':
+            case 'S':
                 if ($player_pos[0] == $arena_size - 1) {
                     echo 'cant go outside the area, if you wanna go outside go touch grass' . PHP_EOL;
                     continue 2;
                 }
                 $player_pos[0]++;
             break 2;
-            case 'left':
+            case 'A':
                 if ($player_pos[1] == 0) {
                     echo 'cant go outside the area, if you wanna go outside go touch grass' . PHP_EOL;
                     continue 2;
                 }
                 $player_pos[1]--;
             break 2;
-            case 'right':
+            case 'D':
                 if ($player_pos[1] == $arena_size - 1) {
                     echo 'cant go outside the area, if you wanna go outside go touch grass' . PHP_EOL;
                     continue 2;
                 }
                 $player_pos[1]++;
             break 2;
-            case 'stay':
+            case 'X':
             break 2;
             default:
                 echo 'didnt understand that, try again' . PHP_EOL;
