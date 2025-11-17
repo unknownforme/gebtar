@@ -3,7 +3,10 @@
 include('functions.php');
 
 clearcmd();
-slow_read("damage rules: \nwhite does 1 damage, green does 5 damage,\nyellow does 45 damage, red does 125 damage,\nstaying on the same tile does 25 damage.\npurple does 0 damage, BUT the next damage you take will be doubled. \n\ntile conversion rules: \nyellow becomes red.\nred becomes green.\ngreen becomes yellow on odd turns, or green, yellow, or purple on even turns.\nwhite becomes green, yellow, or purple.\npurple becomes any random color.\n", 30);
+if(($index = array_search('--no-intro', $argv)) === false)
+    slow_read("damage rules: \nwhite does 1 damage, green does 5 damage,\nyellow does 45 damage, red does 125 damage,\nstaying on the same tile does 25 damage.\npurple does 0 damage, BUT the next damage you take will be doubled. \n\ntile conversion rules: \nyellow becomes red.\nred becomes green.\ngreen becomes yellow on odd turns, or green, yellow, or purple on even turns.\nwhite becomes green, yellow, or purple.\npurple becomes any random color.\n", 30);
+else
+    array_splice($argv, $index, 1);
 
 $player_actions = [];
 $arena_size = 2;
