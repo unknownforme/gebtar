@@ -39,6 +39,64 @@ function slow_read ($text, $ms_time_between_chars= 35) {
         usleep($ms_time_between_chars * 1000);
     }
 }
+function set_tty_icanon(bool $val): void {
+    if(PHP_OS === 'Linux') {
+        static $termios = null;
+        $echo = 10;
+        $icanon = 2;
+        if($termios === null) {
+            $termios = FFI::cdef('
+                struct termios
+                {
+                    unsigned int c_iflag;
+                    unsigned int c_oflag;
+                    unsigned int c_cflag;
+                    unsigned int c_lflag;
+                    unsigned char c_line;
+                    unsigned char c_cc[32];
+                    unsigned int c_ispeed;
+                    unsigned int c_ospeed;
+                };
+
+                int tcgetattr (int __fd, struct termios *__termios_p);
+                int tcsetattr (int __fd, int __optional_actions,
+                          const struct termios *__termios_p);', 'libc.so.6');
+        }
+        $termios_data = $termios->new('struct termios');
+        $err = $termios->tcgetattr(1, FFI::addr($termios_data));
+        assert($err == 0);
+        $lflag = $termios_data->c_lflag;
+        $termios_data->c_lflag = ($lflag & ~($icanon | $echo)) | ($val ? ($icanon | $echo) : 0);
+        $err = $termios->tcsetattr(1, 0, FFI::addr($termios_data));
+        assert($err == 0);
+    } else if(strncasecmp(PHP_OS, 'WIN', 3) === 0) {
+        static $console = null;
+        $echo = 4;
+        $line_input = 2;
+        if($console === null) {
+            $console = FFI::cdef('
+                void* GetStdHandle(unsigned long nStdHandle);
+                int GetConsoleMode(void* hConsoleHandle, unsigned long* lpMode);
+                int SetConsoleMode(void* hConsoleHandle, unsigned long dwMode);', 'kernel32.dll');
+        }
+        $handle = $console->GetStdHandle(-10);
+        assert(!FFI::isNull($handle));
+        $mode = $console->new('unsigned long');
+        $err = $console->GetConsoleMode($handle, FFI::addr($mode));
+        assert($err != 0);
+        $mode['cdata'] = ($mode['cdata'] & ~($line_input | $echo)) | ($val ? ($line_input | $echo) : 0);
+        $err = $console->SetConsoleMode($handle, $mode);
+        assert($err != 0);
+    } else {
+        throw new Exception("Unsupported platform");
+    }
+}
+function read_char(): string {
+    set_tty_icanon(false);
+    $char = fgetc(STDIN);
+    set_tty_icanon(true);
+    return $char;
+}
 //colors
 function red ($word) {
     return "\033[31m".$word."\033[0m";

@@ -121,16 +121,7 @@ while($player_stats['health'][0] > 0) {
     //player movement
     echo 'possible actions: WASD, X to stay, and F/H to hit' . PHP_EOL;
     while (true) {
-        if (strtolower(substr(PHP_OS, 0, 3)) === 'win')  {
-            $action = trim(shell_exec('choice /C WASXDHF1234 /N /M ""'));
-        } else if(exec("stty") !== false) {
-            exec("stty cbreak -echo");
-            $action = strtoupper(fgetc(STDIN));
-            exec("stty -cbreak echo");
-        } else {
-            echo "Unsupported platform >:( (this is shitty code lmfao)";
-            exit(1);
-        }
+        $action = strtoupper(read_char());
         $player_actions[$arena_size-3][] = $action;
         switch ($action) {
             case 'F':
