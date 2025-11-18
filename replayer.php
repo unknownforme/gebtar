@@ -39,8 +39,11 @@ $arena_pieces = ['red', 'green', 'yellow', 'purple', 'white'];
 $turn = 0;
 $player_turn = $turn;
 $player_pos = [1,0];
-$boss_graphics = [blue('▛▚▞▜'), blue('▙') . red('▘▝') . blue('▟')];
-$player_graphics = [blue('╔') . blue('██') . blue('╗'), blue('▟▀▀▙')];
+// $boss_graphics = [blue('▛▚▞▜'), blue('▙') . red('▘▝') . blue('▟')];
+// $player_graphics = [blue('╔') . blue('██') . blue('╗'), blue('▟▀▀▙')];
+$boss_graphics_left = [white('▞▛▜▉'). ' <- skull',white('▛▛▛ ') ];
+$boss_graphics_right = [white('█▛▜▚'). ' <- skull',white(' ▜▜▜') ];
+$player_graphics = [blue('▛▚▞▜'), blue('▙') . red('▘▝') . blue('▟')];
 $boss_pos = 2;
 $poisoned = false;
 echo $seed . PHP_EOL;
@@ -88,6 +91,11 @@ while($player_stats['health'][0] > 0) {
         }
     }
 
+    if ($player_pos[1] <= ($boss_pos - 1)) {
+        $boss_graphics = $boss_graphics_left;
+    } else {
+        $boss_graphics = $boss_graphics_right;
+    }
     for ($boss_looks = 0; $boss_looks < $grid_size; $boss_looks++) {
         echo str_pad("", ($boss_pos * 2 * $grid_size) - ($grid_size * 2), '  ', STR_PAD_LEFT) . $boss_graphics[$boss_looks] . PHP_EOL;
     }
