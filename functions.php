@@ -10,21 +10,29 @@ function hp_bar ($current_hp, $max_hp, $additional_info = ''):string {
 
     $inside_hp_bar = substr($hp_string, 0, $percentage_hp_left);
     $outside_hp_bar = substr($hp_string, $percentage_hp_left);
+    $hp_bar = "[";
     if ($hp_percentage >= 60) {
-        $hp_bar = "[" . bg_green($inside_hp_bar) . $outside_hp_bar . "] $additional_info" . PHP_EOL;
+        $hp_bar .= bg_green($inside_hp_bar);
     } elseif ($hp_percentage >= 30) {
-        $hp_bar = "[" . bg_yellow($inside_hp_bar) . $outside_hp_bar . "] $additional_info" . PHP_EOL;
+        $hp_bar .= bg_yellow($inside_hp_bar);
     } elseif ($current_hp >= 1) {
-        $hp_bar = "[" . bg_red($inside_hp_bar) . $outside_hp_bar . "] $additional_info" . PHP_EOL;
+        $hp_bar .= bg_red($inside_hp_bar);
     } else {
-        $hp_bar = "[" . $inside_hp_bar . $outside_hp_bar . "] $additional_info" . PHP_EOL;
+        $hp_bar .= $inside_hp_bar;
     }
+    $hp_bar .= $outside_hp_bar . "] $additional_info" . PHP_EOL;
 
 
     return $hp_bar;
 }
 function clearcmd () {
     echo "\e[2J\e[H";
+}
+function cursorUp ($amount = 1) {
+    echo "\033[" . $amount . "A";
+}
+function cursorDown ($amount = 1) {
+    echo "\033[" . $amount . "B";
 }
 function slow_read ($text, $ms_time_between_chars= 35) {
     $length = strlen($text);

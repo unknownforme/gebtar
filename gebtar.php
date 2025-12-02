@@ -23,7 +23,6 @@ $turn = 0;
 $player_pos = [1,0];
 //▛▚▞▜
 //▙▀▀▟
-//test
 //▒┃┃▒
 //▙▚▞▟
 // $boss_graphics = [blue('▛▚▞▜'), blue('▙') . red('▘▝') . blue('▟')];
