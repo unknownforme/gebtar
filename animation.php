@@ -1,5 +1,12 @@
 <?php
 
+function mb_strrev($str){
+    $r = '';
+    for ($i = mb_strlen($str); $i>=0; $i--) {
+        $r .= mb_substr($str, $i, 1);
+    }
+    return $r;
+}
 function cursorUp ($amount = 1) {
     echo "\033[" . $amount . "A";
 }
@@ -21,7 +28,7 @@ function bg_yellow ($word) {
 }
 function texture_printer($texture) {
     foreach ($texture as $texture_part) {
-        echo $texture_part . PHP_EOL;
+        echo mb_strrev($texture_part) . PHP_EOL;
     }
 }
 $texture_1 = [
@@ -90,25 +97,25 @@ $texture_blast = [
 ];
 texture_printer($texture_1);
 sleep(1);
-cursorUp(7);
+cursorUp(6);
 
 texture_printer($texture_2);
 sleep(1);
-cursorUp(7);
+cursorUp(6);
 texture_printer($texture_turn);
 usleep(300 * 1000);
-cursorUp(7);
+cursorUp(6);
 usleep(200 * 1000);
 texture_printer($texture_3);
-cursorUp(7);
+cursorUp(6);
 usleep(200 * 1000);
 texture_printer($texture_4);
-cursorUp(7);
+cursorUp(6);
 usleep(200 * 1000);
 texture_printer($texture_5);
-cursorUp(7);
+cursorUp(6);
 usleep(200 * 1000);
 texture_printer($texture_6);
-cursorUp(7);
+cursorUp(6);
 usleep(200 * 1000);
 texture_printer($texture_blast);
